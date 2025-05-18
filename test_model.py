@@ -38,7 +38,7 @@ parser.add_argument('-devices', type=str, default='1,2,3,4')
 parser.add_argument('-seed', type=int, required=False, default=config.seed)
 args = parser.parse_args()
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "%s" % args.devices
+# os.environ["CUDA_VISIBLE_DEVICES"] = "%s" % args.devices
 if args.trigger is None:
     args.trigger = config.trigger_default[args.poison_type]
 
@@ -110,10 +110,9 @@ else:
 poison_set_dir = supervisor.get_poison_set_dir(args)
 model_path = supervisor.get_model_dir(args, cleanse=(args.cleanser is not None))
 
-
 arch = config.arch[args.dataset]
 model = arch(num_classes=num_classes)
-model.load_state_dict(torch.load(model_path))
+model.load_state_dict(torch.load(model_path, map_location=torch.device('cuda')))
 model = nn.DataParallel(model)
 model = model.cuda()
 print("Evaluating model '{}'...".format(model_path))
