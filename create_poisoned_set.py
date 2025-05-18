@@ -79,7 +79,8 @@ if not os.path.exists(poison_set_img_dir):
 
 
 if args.poison_type in ['badnet', 'blend', 'none',
-                        'adaptive_blend', 'adaptive_patch', 'adaptive_k_way']:
+                        'adaptive_blend', 'adaptive_patch', 'adaptive_k_way',
+                        '1xp', '2xp', '3xp']:
 
     trigger_name = args.trigger
     trigger_path = os.path.join(config.triggers_dir, trigger_name)
@@ -122,6 +123,11 @@ if args.poison_type in ['badnet', 'blend', 'none',
                                                   poison_rate=args.poison_rate, trigger=trigger,
                                                   path=poison_set_img_dir, target_class=config.target_class[args.dataset],
                                                   alpha=alpha)
+    elif args.poison_type in ['1xp', '2xp', '3xp']:
+        from poison_tool_box import pixel
+        poison_generator = pixel.poison_generator(img_size=img_size, dataset=train_set,
+                                                  poison_rate=args.poison_rate, poisoner_flag=args.poison_type,
+                                                  path=poison_set_img_dir, target_class=config.target_class[args.dataset])
 
     elif args.poison_type == 'adaptive_blend':
 

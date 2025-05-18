@@ -134,7 +134,8 @@ def get_poison_transform(poison_type, dataset_name, target_class, source_class=1
     trigger_mask = None
 
     if poison_type in ['none', 'badnet', 'blend',
-                       'adaptive_blend', 'adaptive_patch', 'adaptive_k_way']:
+                       'adaptive_blend', 'adaptive_patch', 'adaptive_k_way', 
+                       '1xp', '2xp', '3xp']:
 
         if trigger_transform is None:
             trigger_transform = transforms.Compose([
@@ -167,6 +168,10 @@ def get_poison_transform(poison_type, dataset_name, target_class, source_class=1
             poison_transform = blend.poison_transform(img_size=img_size, trigger=trigger,
                                                       target_class=target_class, alpha=alpha)
         
+        elif poison_type in ['1xp', '2xp', '3xp']:
+            from poison_tool_box import pixel
+            poison_transform = pixel.poison_transform(img_size=img_size, poisoner_flag=poison_type,
+                                                      target_class = target_class)
         elif poison_type == 'adaptive_blend':
             from poison_tool_box import adaptive_blend
             poison_transform = adaptive_blend.poison_transform(img_size=img_size, trigger=trigger,

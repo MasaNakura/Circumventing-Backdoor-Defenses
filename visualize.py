@@ -308,17 +308,17 @@ for vid, path in enumerate(model_list):
 
         non_poison_indices = list(set(list(range(len(poisoned_set)))) - set(poison_indices.tolist()))
 
-        clean_targets = targets[non_poison_indices]
-        poisoned_targets = targets[poison_indices]
+        clean_targets = targets[non_poison_indices].cpu()
+        poisoned_targets = targets[poison_indices].cpu()
 
         print("Total Clean:", len(clean_targets))
         print("Total Poisoned:", len(poisoned_targets))
 
-        clean_features = features[non_poison_indices]
-        poisoned_features = features[poison_indices]
+        clean_features = features[non_poison_indices].cpu()
+        poisoned_features = features[poison_indices].cpu()
 
-        clean_ids = ids[non_poison_indices]
-        poisoned_ids = ids[poison_indices]
+        clean_ids = ids[non_poison_indices].cpu()
+        poisoned_ids = ids[poison_indices].cpu()
 
         class_clean_features = clean_features[clean_targets == target_class]
         class_poisoned_features = poisoned_features[poisoned_targets == target_class]
