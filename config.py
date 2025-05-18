@@ -1,4 +1,4 @@
-from utils import resnet, wresnet, vgg, mobilenetv2
+from utils import resnet, wresnet, vgg, mobilenetv2, resnetcifar
 from utils import supervisor
 from utils import tools
 import torch
@@ -49,7 +49,8 @@ trigger_default = {
 }
 
 arch = {
-    'cifar10': resnet.resnet20, 
+    'cifar10': resnet.resnet20,
+    #'cifar10': resnetcifar.ResNet18,
     # 'cifar10': vgg.vgg16_bn,
     # 'cifar10': mobilenetv2.mobilenetv2,
     'gtsrb' : resnet.resnet20,
