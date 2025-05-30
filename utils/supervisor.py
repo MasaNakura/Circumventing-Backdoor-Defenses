@@ -35,10 +35,13 @@ def get_model_name(args, cleanse=False):
     elif hasattr(args, 'model') and args.model is not None:
         model_name = args.model
     else:
+        model = 'default'
+        if args.model_type:
+            model = args.model_type
         if args.no_aug:
-            model_name = f'full_base_no_aug_seed={args.seed}.pt'
+            model_name = f'full_base_no_aug_{model}_seed={args.seed}.pt'
         else:
-            model_name = f'full_base_aug_seed={args.seed}.pt'
+            model_name = f'full_base_aug_{model}_seed={args.seed}.pt'
         
         if cleanse and hasattr(args, 'cleanser') and args.cleanser is not None:
             model_name = f"cleansed_{args.cleanser}_{model_name}"

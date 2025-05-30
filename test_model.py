@@ -36,6 +36,7 @@ parser.add_argument('-no_normalize', default=False, action='store_true')
 parser.add_argument('-no_aug', default=False, action='store_true')
 parser.add_argument('-devices', type=str, default='1,2,3,4')
 parser.add_argument('-seed', type=int, required=False, default=config.seed)
+parser.add_argument('-model_type', type=str, required=False, choices=config.parser_choices['model_type'])
 args = parser.parse_args()
 
 # os.environ["CUDA_VISIBLE_DEVICES"] = "%s" % args.devices
@@ -79,7 +80,21 @@ else:
 
 if args.dataset == 'cifar10':
     num_classes = 10
-    arch = config.arch[args.dataset]
+    if args.model_type:
+        if args.model_type == 'resnet18':
+            arch = resnetcifar.ResNet18
+        elif args.model_type == 'resnet20':
+            arch = resnet.resnet20
+        elif args.model_type == 'resnet32':
+            arch = resnet.resnet32
+        elif args.model_type == 'resnet44':
+            arch = resnet.resnet44
+        elif args.model_type == 'resnet56':
+            arch = resnet.resnet56
+        elif args.model_type == 'resnet110':
+            arch = resnet.resnet110
+    else:
+        arch = config.arch[args.dataset]
     momentum = 0.9
     weight_decay = 1e-4
     epochs = 200

@@ -5,7 +5,7 @@ import argparse
 from torch import nn
 from utils import supervisor, tools
 import config
-
+from utils import resnet, wresnet, vgg, mobilenetv2, resnetcifar
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-dataset', type=str, required=False, default=config.parser_default['dataset'],
@@ -27,7 +27,7 @@ parser.add_argument('-devices', type=str, default='0')
 parser.add_argument('-cleanser', type=str, choices=['SCAn', 'AC', 'SS', 'SPECTRE', 'Strip'], default=None)
 parser.add_argument('-log', default=False, action='store_true')
 parser.add_argument('-seed', type=int, required=False, default=config.seed)
-
+parser.add_argument('-model_type', type=str, required=False, choices=config.parser_choices['model_type'])
 args = parser.parse_args()
 
 if args.trigger is None:
@@ -157,8 +157,21 @@ test_set_loader = torch.utils.data.DataLoader(
     batch_size=batch_size, shuffle=True, **kwargs)
 
 
-
-arch = config.arch[args.dataset]
+if args.model_type:
+    if args.model_type == 'resnet18':
+        arch = resnetcifar.ResNet18
+    elif args.model_type == 'resnet20':
+        arch = resnet.resnet20
+    elif args.model_type == 'resnet32':
+        arch = resnet.resnet32
+    elif args.model_type == 'resnet44':
+        arch = resnet.resnet44
+    elif args.model_type == 'resnet56':
+        arch = resnet.resnet56
+    elif args.model_type == 'resnet110':
+        arch = resnet.resnet110
+else:
+    arch = config.arch[args.dataset]
 
 
 poison_transform = supervisor.get_poison_transform(poison_type=args.poison_type, dataset_name=args.dataset,

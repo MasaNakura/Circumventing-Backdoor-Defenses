@@ -26,6 +26,7 @@ parser_choices = {
     'poison_type': ['badnet', 'blend', 'adaptive_blend', 'adaptive_patch', 'adaptive_k_way', '1xp', '2xp', '3xp', 'none'],
     'poison_rate': [i / 1000.0 for i in range(0, 500)],
     'cover_rate': [i / 1000.0 for i in range(0, 500)],
+    'model_type': ['resnet18', 'resnet32', 'resnet44', 'resnet56', 'resnet110']
 }
 
 parser_default = {
@@ -49,8 +50,8 @@ trigger_default = {
 }
 
 arch = {
-    'cifar10': resnet.resnet20,
-    #'cifar10': resnetcifar.ResNet18,
+    #'cifar10': resnet.resnet20,
+    'cifar10': resnetcifar.ResNet18,
     # 'cifar10': vgg.vgg16_bn,
     # 'cifar10': mobilenetv2.mobilenetv2,
     'gtsrb' : resnet.resnet20,
