@@ -103,6 +103,7 @@ parser.add_argument('-no_normalize', default=False, action='store_true')
 parser.add_argument('-devices', type=str, default='0')
 parser.add_argument('-target_class', type=int, default=-1)
 parser.add_argument('-seed', type=int, required=False, default=config.seed)
+parser.add_argument('-model_type', type=str, required=False, choices=config.parser_choices['model_type'])
 
 args = parser.parse_args()
 
@@ -153,7 +154,21 @@ else:
     raise NotImplementedError('<Unimplemented Dataset> %s' % args.dataset)
 
 
-arch = config.arch[args.dataset]
+if args.model_type:
+    if args.model_type == 'resnet18':
+        arch = resnetcifar.ResNet18
+    elif args.model_type == 'resnet20':
+        arch = resnet.resnet20
+    elif args.model_type == 'resnet32':
+        arch = resnet.resnet32
+    elif args.model_type == 'resnet44':
+        arch = resnet.resnet44
+    elif args.model_type == 'resnet56':
+        arch = resnet.resnet56
+    elif args.model_type == 'resnet110':
+        arch = resnet.resnet110
+else:
+    arch = config.arch[args.dataset]
 # Set up Poisoned Set
 poison_set_dir = supervisor.get_poison_set_dir(args)
 poisoned_set_img_dir = os.path.join(poison_set_dir, 'data')
