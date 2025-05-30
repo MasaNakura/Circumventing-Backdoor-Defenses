@@ -23,7 +23,7 @@ record_model_arch = False
 
 parser_choices = {
     'dataset': ['gtsrb','cifar10', 'cifar100', 'imagenette'],
-    'poison_type': ['badnet', 'blend', 'adaptive_blend', 'adaptive_patch', 'adaptive_k_way', '1xp', '2xp', '3xp', 'none'],
+    'poison_type': ['badnet', 'blend', 'adaptive_blend', 'adaptive_patch', 'adaptive_k_way', '1xp', '2xp', '3xp', 'adaptive_3xp', 'adaptive_3xp_t', 'none'],
     'poison_rate': [i / 1000.0 for i in range(0, 500)],
     'cover_rate': [i / 1000.0 for i in range(0, 500)],
     'model_type': ['resnet18', 'resnet32', 'resnet44', 'resnet56', 'resnet110']
@@ -44,14 +44,16 @@ trigger_default = {
     '1xp': 'none',
     '2xp': 'none',
     '3xp': 'none',
+    'adaptive_3xp': 'none',
+    'adaptive_3xp_t': 'none',
     'badnet' : 'badnet_patch.png',
     'blend' : 'hellokitty_32.png',
     'none' : 'none',
 }
 
 arch = {
-    #'cifar10': resnet.resnet20,
-    'cifar10': resnetcifar.ResNet18,
+    'cifar10': resnet.resnet20,
+    #'cifar10': resnetcifar.ResNet18,
     # 'cifar10': vgg.vgg16_bn,
     # 'cifar10': mobilenetv2.mobilenetv2,
     'gtsrb' : resnet.resnet20,

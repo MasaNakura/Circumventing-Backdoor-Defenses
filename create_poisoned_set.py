@@ -80,7 +80,7 @@ if not os.path.exists(poison_set_img_dir):
 
 if args.poison_type in ['badnet', 'blend', 'none',
                         'adaptive_blend', 'adaptive_patch', 'adaptive_k_way',
-                        '1xp', '2xp', '3xp']:
+                        '1xp', '2xp', '3xp', 'adaptive_3xp', 'adaptive_3xp_t']:
 
     trigger_name = args.trigger
     trigger_path = os.path.join(config.triggers_dir, trigger_name)
@@ -128,7 +128,18 @@ if args.poison_type in ['badnet', 'blend', 'none',
         poison_generator = pixel.poison_generator(img_size=img_size, dataset=train_set,
                                                   poison_rate=args.poison_rate, poisoner_flag=args.poison_type,
                                                   path=poison_set_img_dir, target_class=config.target_class[args.dataset])
-
+    elif args.poison_type in ['adaptive_3xp']:
+        from poison_tool_box import adaptive_pixel
+        poison_generator = adaptive_pixel.poison_generator(img_size=img_size, dataset=train_set,
+                                                           poison_rate=args.poison_rate,
+                                                           path=poison_set_img_dir, target_class=config.target_class[args.dataset], 
+                                                           cover_rate=args.cover_rate)
+    elif args.poison_type in ['adaptive_3xp_t']:
+        from poison_tool_box import adaptive_pixel_t
+        poison_generator = adaptive_pixel_t.poison_generator(img_size=img_size, dataset=train_set,
+                                                             poison_rate=args.poison_rate,
+                                                             path=poison_set_img_dir, target_class=config.target_class[args.dataset], 
+                                                             cover_rate=args.cover_rate)
     elif args.poison_type == 'adaptive_blend':
 
         from poison_tool_box import adaptive_blend
@@ -167,7 +178,7 @@ if args.poison_type in ['badnet', 'blend', 'none',
 
 
 
-    if args.poison_type not in ['adaptive_blend', 'adaptive_patch', 'adaptive_k_way']:
+    if args.poison_type not in ['adaptive_blend', 'adaptive_patch', 'adaptive_k_way', 'adaptive_3xp', 'adaptive_3xp_t']:
         poison_indices, label_set = poison_generator.generate_poisoned_training_set()
         print('[Generate Poisoned Set] Save %d Images' % len(label_set))
 
