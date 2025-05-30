@@ -3,6 +3,7 @@ import torch
 import random
 from torchvision.utils import save_image
 from config import poison_seed
+import numpy as np
 
 class poison_generator():
 
@@ -25,7 +26,7 @@ class poison_generator():
         self.poison_rate = poison_rate
         self.path = path  # path to save the dataset
         self.target_class = target_class # by default : target_class = 0
-
+        self.rng = np.random.RandomState()
         # number of images
         self.num_img = len(dataset)
 
@@ -47,8 +48,11 @@ class poison_generator():
 
             if pt < num_poison and poison_indices[pt] == i:
                 gt = self.target_class
-                for j, pos in enumerate(self.pos):
-                    img[:, pos[0], pos[1]] = torch.FloatTensor(self.col[j])
+                # for j, pos in enumerate(self.pos):
+                idx = self.rng.choice(np.arange(len(self.pos))) 
+                pos = self.pos[idx]
+                col = self.col[idx]
+                img[:, pos[0], pos[1]] = torch.FloatTensor(col)
                 pt+=1
 
             img_file_name = '%d.png' % i
